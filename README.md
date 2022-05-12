@@ -5,7 +5,7 @@
 
 ```json
 {
-    "s3Operator": {
+    "awsS3Operator": {
         "landingPath": "s3://my-bucket/test/data.csv",
         "localPath": "/my-local-path/data.csv",
         "bucketRegion": "us-west-1"

@@ -20,6 +20,7 @@ public class App {
 
     public static void main(String[] args) throws ControllerException {
         try {
+            System.setProperty("logback.configurationFile", "logback.xml");
             LOG.info("Starting pipeline.");
             EnvironmentVariables env = new EnvironmentVariables();
             String encodedInput = env.getEncodedInput();
@@ -27,7 +28,7 @@ public class App {
             String decodedInput = encoder.decode(encodedInput);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-            String jsonNode = objectMapper.readTree(decodedInput).at("/s3Operator").toString();
+            String jsonNode = objectMapper.readTree(decodedInput).at("/awsS3Operator").toString();
             Contract request = objectMapper.readValue(jsonNode, Contract.class);
 
             ObjectStorage storage = new S3Operator(env.getAWSKeyId(), env.getAWSSecretAccessKey(), request.getBucketRegion());
