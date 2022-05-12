@@ -1,5 +1,8 @@
-# aws-s3-java-pipeline
+# AWS S3 Data Pipeline
 
+## Description
+
+This service allows upload a local file to AWS S3 bucket.
 
 ## Contract
 
