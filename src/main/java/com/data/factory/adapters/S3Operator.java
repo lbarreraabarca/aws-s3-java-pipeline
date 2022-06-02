@@ -7,10 +7,13 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import com.data.factory.exceptions.ObjectStorageException;
 import com.data.factory.ports.ObjectStorage;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +90,10 @@ public class S3Operator implements ObjectStorage {
         try{
             AmazonS3 client = this.getAWSS3Client();
             LOG.info("Downloading {} into {}", blobPath, destPath);
-            client.getObject(blobPath, destPath);
+            ArrayList<String> bucket = this.extractBucket(blobPath);
+            S3Object s3Object = client.getObject(bucket.get(0), bucket.get(1));
+            S3ObjectInputStream s3ObjectInputStream = s3Object.getObjectContent();
+            FileUtils.copyInputStreamToFile(s3ObjectInputStream, new File(destPath));
         } catch (Exception e){
             throw new ObjectStorageException(String.format("%s %s", e.getClass(), e.getMessage()));
         }
